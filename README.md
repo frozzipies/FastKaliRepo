@@ -28,3 +28,5 @@ This is a Bash script to fix the Kali Linux repository, add a Kali repository to
 3. Run the bash script
 
    ```bash fastrepo.sh```
+![image](https://github.com/frozzipies/Fast-Kali-Repo/assets/97401702/51bcbb79-c2aa-4859-9735-f0d408acfcc5)
+
