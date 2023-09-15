@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check if the script is run as root
+if [ "$(id -u)" -ne 0 ]; then
+  echo "This script must be run as root. Please use 'sudo' or log in as root."
+  exit 1
+fi
+
 # Function to clear the terminal
 clear_terminal() {
   clear
