@@ -23,8 +23,8 @@ This is a Bash script to fix the Kali Linux repository, add a Kali repository to
 
 2. Open the Directory
 
-  ```cd Fast-Kali-Repo```
+   ```cd Fast-Kali-Repo```
 
 3. Run the bash script
 
-  ```bash fastrepo.sh```
+   ```bash fastrepo.sh```
