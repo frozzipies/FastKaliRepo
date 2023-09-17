@@ -19,7 +19,7 @@ This is a Bash script to fix the Kali Linux repository, add a Kali repository to
 
 1. Clone the repository to your local machine:
 
-   ```git clone https://github.com/frozzipies/Fast-Kali-Repo/```
+   ```git clone https://github.com/frozzipies/FastKaliRepo/```
 
 2. Open the Directory
 
