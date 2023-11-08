@@ -203,7 +203,7 @@ while true; do
   echo "Choose an option:"
   echo "1. Speed up your Kali Repository"
   echo "2. Add Kali Repository (for non-Kali distro)"
-  echo "3. Add Kali Repository (for Ubuntu_"
+  echo "3. Add Kali Repository (for Ubuntu)"
   echo "4. Update & Upgrade Repository"
   echo "5. Update Repository"
   echo "6. Back to Old Repository"
