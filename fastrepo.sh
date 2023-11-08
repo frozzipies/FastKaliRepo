@@ -158,31 +158,26 @@ add_kali_repository_for_ubuntu() {
     echo "Backup of the original sources.list file (sources.list.bak) already exists."
   fi
 
-  # Define the Kali repository lines for Ubuntu
+  # Define the Kali repository lines for non-Kali distro
   kali_lines=(
     "deb https://mirrors.ocf.berkeley.edu/kali/ kali-rolling main contrib non-free"
-    "deb-src https://mirrors.ocf.berkeley.edu/kali/ kali-rolling main contrib non-free"
+    "# For source package access, uncomment the following line"
+    "# deb-src https://mirrors.ocf.berkeley.edu/kali/ kali-rolling main contrib non-free"
   )
 
-  # Remove the old GPG key
-  apt-key del ED444FF07D8D0BF6
+  # Update the GPG key
+  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys ED444FF07D8D0BF6
 
-  # Import the new GPG key using the apt-key command
-  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys ED444FF07D8D0BF6
-
-  # Append the Kali repository lines to the sources.list file, avoiding duplicate entries
-  sources_list_file="/etc/apt/sources.list"
+  # Append the Kali repository lines to the sources.list file
   for kali_line in "${kali_lines[@]}"; do
-    if ! grep -q "$kali_line" "$sources_list_file"; then
-      echo "$kali_line" >> "$sources_list_file"
-    fi
+    echo "$kali_line" >> "/etc/apt/sources.list"
   done
 
   # Display information about the GPG key issue
   echo "The GPG key issue has been resolved. Please note that the PUBKEY (ED444FF07D8D0BF6) may vary for different users."
 
   # Remove duplicate entries in the sources.list file
-  awk '!x[$0]++' "$sources_list_file" > "$sources_list_file.tmp" && mv "$sources_list_file.tmp" "$sources_list_file"
+  awk '!x[$0]++' "/etc/apt/sources.list" > "/etc/apt/sources.list.tmp" && mv "/etc/apt/sources.list.tmp" "/etc/apt/sources.list"
 
   # Clear the terminal
   clear_terminal
@@ -238,4 +233,3 @@ while true; do
       echo "Invalid choice. Please try again."
       ;;
   esac
-done
