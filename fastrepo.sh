@@ -148,46 +148,6 @@ add_kali_repository() {
   echo "Kali repository has been added to the sources.list file."
 }
 
-# Function to add Kali repository for Ubuntu and fix GPG key and duplicate entry issues
-add_kali_repository_for_ubuntu() {
-  # Backup the original sources.list file if it hasn't been backed up yet
-  if [ ! -f /etc/apt/sources.list.bak ]; then
-    cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    echo "Original sources.list file has been backed up as sources.list.bak."
-  else
-    echo "Backup of the original sources.list file (sources.list.bak) already exists."
-  fi
-
-  # Define the Kali repository lines for non-Kali distro
-  kali_lines=(
-    "deb https://mirrors.ocf.berkeley.edu/kali/ kali-rolling main contrib non-free"
-    "# For source package access, uncomment the following line"
-    "# deb-src https://mirrors.ocf.berkeley.edu/kali/ kali-rolling main contrib non-free"
-  )
-
-  # Update the GPG key
-  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys ED444FF07D8D0BF6
-
-  # Append the Kali repository lines to the sources.list file
-  for kali_line in "${kali_lines[@]}"; do
-    echo "$kali_line" >> "/etc/apt/sources.list"
-  done
-
-  # Display information about the GPG key issue
-  echo "The GPG key issue has been resolved. Please note that the PUBKEY (ED444FF07D8D0BF6) may vary for different users."
-
-  # Remove duplicate entries in the sources.list file
-  awk '!x[$0]++' "/etc/apt/sources.list" > "/etc/apt/sources.list.tmp" && mv "/etc/apt/sources.list.tmp" "/etc/apt/sources.list"
-
-  # Clear the terminal
-  clear_terminal
-
-  # Display the custom text
-  custom_text
-
-  echo "Kali repository for Ubuntu has been added to the sources.list file, and duplicate entries have been removed."
-}
-
 # Function to clear the terminal and display the custom text
 clear_terminal
 custom_text
@@ -198,11 +158,10 @@ while true; do
   echo "Choose an option:"
   echo "1. Speed up your Kali Repository"
   echo "2. Add Kali Repository (for non-Kali distro)"
-  echo "3. Add Kali Repository (for Ubuntu)"
-  echo "4. Update & Upgrade Repository"
-  echo "5. Update Repository"
-  echo "6. Back to Old Repository"
-  echo "7. Exit"
+  echo "3. Update & Upgrade Repository"
+  echo "4. Update Repository"
+  echo "5. Back to Old Repository"
+  echo "6. Exit"
   read -p "Enter your choice: " choice
 
   # Process the user's choice
@@ -214,22 +173,20 @@ while true; do
       add_kali_repository
       ;;
     3)
-      add_kali_repository_for_ubuntu
-      ;;
-    4)
       update_and_upgrade_repository
       ;;
-    5)
+    4)
       update_repository
       ;;
-    6)
+    5)
       revert_to_old_repository
       ;;
-    7)
+    6)
       echo "Exiting."
       exit 0  # Exit the script
       ;;
     *)
       echo "Invalid choice. Please try again."
       ;;
-  done 
+  esac
+done
