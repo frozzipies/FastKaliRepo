@@ -117,37 +117,6 @@ revert_to_old_repository() {
   fi
 }
 
-# Function to add Kali repository to non-Kali distro
-add_kali_repository() {
-  # Backup the original sources.list file if it hasn't been backed up yet
-  if [ ! -f /etc/apt/sources.list.bak ]; then
-    cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    echo "Original sources.list file has been backed up as sources.list.bak."
-  else
-    echo "Backup of the original sources.list file (sources.list.bak) already exists."
-  fi
-
-  # Define the Kali repository lines for non-Kali distro
-  kali_lines=(
-    "deb https://mirrors.ocf.berkeley.edu/kali/ kali-rolling main contrib non-free"
-    "# For source package access, uncomment the following line"
-    "# deb-src https://mirrors.ocf.berkeley.edu/kali/ kali-rolling main contrib non-free"
-  )
-
-  # Append the Kali repository lines to the sources.list file
-  for kali_line in "${kali_lines[@]}"; do
-    echo "$kali_line" >> "/etc/apt/sources.list"
-  done
-
-  # Clear the terminal
-  clear_terminal
-
-  # Display the custom text
-  custom_text
-
-  echo "Kali repository has been added to the sources.list file."
-}
-
 # Function to clear the terminal and display the custom text
 clear_terminal
 custom_text
@@ -157,11 +126,10 @@ while true; do
   # Display the menu and get user input
   echo "Choose an option:"
   echo "1. Speed up your Kali Repository"
-  echo "2. Add Kali Repository (for non-Kali distro)"
-  echo "3. Update & Upgrade Repository"
-  echo "4. Update Repository"
-  echo "5. Back to Old Repository"
-  echo "6. Exit"
+  echo "2. Update & Upgrade Repository"
+  echo "3. Update Repository"
+  echo "4. Back to Old Repository"
+  echo "5. Exit"
   read -p "Enter your choice: " choice
 
   # Process the user's choice
@@ -170,18 +138,15 @@ while true; do
       speed_up_repository
       ;;
     2)
-      add_kali_repository
-      ;;
-    3)
       update_and_upgrade_repository
       ;;
-    4)
+    3)
       update_repository
       ;;
-    5)
+    4)
       revert_to_old_repository
       ;;
-    6)
+    5)
       echo "Exiting."
       exit 0  # Exit the script
       ;;
