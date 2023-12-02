@@ -125,11 +125,13 @@ custom_text
 while true; do
   # Display the menu and get user input
   echo "Choose an option:"
+  echo ""
   echo "1. Speed up your Kali Repository"
   echo "2. Update & Upgrade Repository"
   echo "3. Update Repository"
   echo "4. Back to Old Repository"
   echo "5. Exit"
+  echo ""
   read -p "Enter your choice: " choice
 
   # Process the user's choice
