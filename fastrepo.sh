@@ -71,6 +71,65 @@ speed_up_repository() {
   echo "Repository configuration updated, and package cache cleaned."
 }
 
+# Function to add Kali repository to non-Kali distros
+add_kali_repository_non_kali() {
+  echo "Install Kali Repo"
+
+  set -x  # Enable command echoing
+
+  # Update repositories
+  echo "Running: sudo apt update"
+  sudo apt update
+
+  # Upgrade packages
+  echo "Running: sudo apt upgrade"
+  sudo apt upgrade
+  echo "Running: sudo apt dist-upgrade"
+  sudo apt dist-upgrade
+
+  # Install required packages
+  echo "Running: sudo apt install curl wget gnupg git"
+  sudo apt install curl wget gnupg git
+
+  # Add Kali Linux repository key
+  echo "Running: wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add"
+  wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add
+
+  # Add Kali Linux repository to sources list
+  echo "Running: sudo sh -c \"echo 'deb https://http.kali.org/kali kali-rolling main non-free contrib' > /etc/apt/sources.list.d/kali.list\""
+  sudo sh -c "echo 'deb https://http.kali.org/kali kali-rolling main non-free contrib' > /etc/apt/sources.list.d/kali.list"
+
+  # Set package preferences for Kali Linux
+  echo "Running: sudo sh -c \"echo 'Package: *' > /etc/apt/preferences.d/kali.pref; echo 'Pin: release a=kali-rolling' >> /etc/apt/preferences.d/kali.pref; echo 'Pin-Priority: 50' >> /etc/apt/preferences.d/kali.pref\""
+  sudo sh -c "echo 'Package: *' > /etc/apt/preferences.d/kali.pref; echo 'Pin: release a=kali-rolling' >> /etc/apt/preferences.d/kali.pref; echo 'Pin-Priority: 50' >> /etc/apt/preferences.d/kali.pref"
+
+  # Download and install Kali Linux archive keyring
+  echo "Running: wget http://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2022.1_all.deb"
+  wget http://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2022.1_all.deb
+  echo "Running: sudo dpkg -i kali-archive-keyring_2022.1_all.deb"
+  sudo dpkg -i kali-archive-keyring_2022.1_all.deb
+  echo "Running: rm kali-archive-keyring_2022.1_all.deb"
+  rm kali-archive-keyring_2022.1_all.deb
+
+  # Update repositories again
+  echo "Running: sudo apt update"
+  sudo apt update
+  echo "Running: sudo apt update --fix-missing"
+  sudo apt update --fix-missing
+
+  # Fix any broken dependencies
+  echo "Running: sudo apt install -f"
+  sudo apt install -f
+  echo "Running: sudo apt --fix-broken install"
+  sudo apt --fix-broken install
+
+  # Upgrade packages
+  echo "Running: sudo apt upgrade"
+  sudo apt upgrade
+
+  set +x  # Disable command echoing
+}
+
 # Function to update the repository
 update_repository() {
   sudo apt update
@@ -126,10 +185,11 @@ while true; do
   # Display the menu and get user input
   echo "Choose an option:"
   echo "1. Speed up your Kali Repository"
-  echo "2. Update & Upgrade Repository"
-  echo "3. Update Repository"
-  echo "4. Back to Old Repository"
-  echo "5. Exit"
+  echo "2. Add Kali Repository (for non-Kali Distro)"
+  echo "3. Update & Upgrade Repository"
+  echo "4. Update Repository"
+  echo "5. Back to Old Repository"
+  echo "6. Exit"
   read -p "Enter your choice: " choice
 
   # Process the user's choice
@@ -138,15 +198,18 @@ while true; do
       speed_up_repository
       ;;
     2)
-      update_and_upgrade_repository
+      add_kali_repository_non_kali
       ;;
     3)
-      update_repository
+      update_and_upgrade_repository
       ;;
     4)
-      revert_to_old_repository
+      update_repository
       ;;
     5)
+      revert_to_old_repository
+      ;;
+    6)
       echo "Exiting."
       exit 0  # Exit the script
       ;;
